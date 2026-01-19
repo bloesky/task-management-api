@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Management</title>
+  
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    margin: 50px auto;
+  }
+
+  input, button {
+    padding: 8px;
+    margin: 5px 0;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  li {
+    margin: 6px 0;
+  }
+</style>
+
+</head>
+<body>
+  <h1>Task Management</h1>
+
+  <input id="taskInput" type="text" placeholder="New task">
+  <button onclick="addTask()">Add Task</button>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    const API_URL = "http://localhost:3000/tasks";
+
+    // Load tasks
+    async function loadTasks() {
+      const res = await fetch(API_URL);
+      const tasks = await res.json();
+
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.textContent = task.title;
+        list.appendChild(li);
+      });
+    }
+
+    // Add task
+    async function addTask() {
+      const input = document.getElementById("taskInput");
+      const title = input.value;
+
+      if (!title) return;
+
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+      });
+
+      input.value = "";
+      loadTasks();
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>
