@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+
 
 app.use(express.json());
+
+const taskRoutes = require("./routes/tasks");
+app.use("/tasks", taskRoutes);
+
 
 let tasks = [];
 
@@ -53,8 +57,8 @@ app.post('/tasks', (req, res) => {
 });
 
 
-app.listen(PORT, () =>{
-    console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
 });
 
 
